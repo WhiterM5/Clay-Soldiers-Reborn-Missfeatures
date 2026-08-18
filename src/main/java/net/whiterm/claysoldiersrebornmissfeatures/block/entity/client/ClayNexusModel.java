@@ -1,8 +1,5 @@
 package net.whiterm.claysoldiersrebornmissfeatures.block.entity.client;
 
-import com.mojang.blaze3d.systems.VertexSorter;
-import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.util.Identifier;
 import net.whiterm.claysoldiersrebornmissfeatures.ClaySoldiersRebornMissfeatures;
 import net.whiterm.claysoldiersrebornmissfeatures.block.entity.ClayNexusBlockEntity;

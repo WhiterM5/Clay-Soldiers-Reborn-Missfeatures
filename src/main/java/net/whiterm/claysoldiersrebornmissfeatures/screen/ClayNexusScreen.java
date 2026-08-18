@@ -3,17 +3,12 @@ package net.whiterm.claysoldiersrebornmissfeatures.screen;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.tooltip.Tooltip;
-import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -21,8 +16,6 @@ import net.minecraft.util.math.BlockPos;
 import net.whiterm.claysoldiersrebornmissfeatures.ClaySoldiersRebornMissfeatures;
 import net.whiterm.claysoldiersrebornmissfeatures.block.entity.ClayNexusBlockEntity;
 import net.whiterm.claysoldiersrebornmissfeatures.network.ModPackets;
-
-import java.awt.*;
 
 public class ClayNexusScreen extends HandledScreen<ClayNexusScreenHandler> {
     private static final Identifier TEXTURE = new Identifier(ClaySoldiersRebornMissfeatures.MOD_ID, "textures/gui/clay_nexus_gui.png");

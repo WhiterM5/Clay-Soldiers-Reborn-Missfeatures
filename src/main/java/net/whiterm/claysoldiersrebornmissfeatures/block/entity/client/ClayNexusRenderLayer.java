@@ -1,6 +1,7 @@
 package net.whiterm.claysoldiersrebornmissfeatures.block.entity.client;
 
 import com.matthewperiut.clay.util.ClientInfoStorage;
+import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -15,7 +16,6 @@ import net.whiterm.claysoldiersrebornmissfeatures.block.entity.ClayNexusBlockEnt
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
-import net.minecraft.client.render.OverlayTexture;
 
 public class ClayNexusRenderLayer extends GeoRenderLayer<ClayNexusBlockEntity> {
     public ClayNexusRenderLayer(GeoRenderer<ClayNexusBlockEntity> entityRendererIn) {

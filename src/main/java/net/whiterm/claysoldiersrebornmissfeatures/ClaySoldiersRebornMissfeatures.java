@@ -1,7 +1,6 @@
 package net.whiterm.claysoldiersrebornmissfeatures;
 
 import net.fabricmc.api.ModInitializer;
-
 import net.whiterm.claysoldiersrebornmissfeatures.block.ModBlocks;
 import net.whiterm.claysoldiersrebornmissfeatures.block.entity.ModBlockEntities;
 import net.whiterm.claysoldiersrebornmissfeatures.config.ModConfig;
