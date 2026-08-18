@@ -1,0 +1,40 @@
+{
+    "schemaVersion": 1,
+    "id": "claysoldiersmissf",
+    "version": "${version}",
+    "name": "Clay Soldiers Reborn - Missfeatures",
+    "description": "Adds missing features to Clay Soldiers Reborn.",
+    "authors": [
+      "WhiterM"
+    ],
+    "contact": {
+      "homepage": "No homepage yet",
+      "sources": "No source yet"
+    },
+    "license": "MIT",
+    "icon": "assets/claysoldiersmissf/icon.png",
+    "environment": "*",
+    "entrypoints": {
+      "main": [
+        "net.whiterm.claysoldiersrebornmissfeatures.ClaySoldiersRebornMissfeatures"
+      ],
+      "client": [
+        "net.whiterm.claysoldiersrebornmissfeatures.ClaySoldiersRebornMissfeaturesClient"
+      ],
+      "fabric-datagen": [
+        "net.whiterm.claysoldiersrebornmissfeatures.ClaySoldiersRebornMissfeaturesDataGenerator"
+      ]
+    },
+    "mixins": [
+      "claysoldiersmissf.mixins.json"
+    ],
+	"depends": {
+		"fabricloader": ">=0.14.21",
+		"minecraft": "~1.20.1",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
