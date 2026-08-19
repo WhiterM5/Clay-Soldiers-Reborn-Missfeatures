@@ -24,14 +24,13 @@ public class ClayNexusRenderLayer extends GeoRenderLayer<ClayNexusBlockEntity> {
 
     @Override
     public void render(MatrixStack poseStack, ClayNexusBlockEntity animatable, BakedGeoModel bakedModel, RenderLayer renderType, VertexConsumerProvider bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
-        //super.render(poseStack, animatable, bakedModel, renderType, bufferSource, buffer, partialTick, packedLight, packedOverlay);
         Identifier overlay = new Identifier(ClaySoldiersRebornMissfeatures.MOD_ID, "textures/block/clay_nexus_team_color_layer.png");
         RenderLayer renderLayer = RenderLayer.getEntityTranslucent(overlay);
         VertexConsumer vertexConsumer = bufferSource.getBuffer(renderLayer);
         int[] rgb = getTeamColor(animatable);
 
-        poseStack.push(); //writes current "pos etc" and after following line if you add another layer everithing will be set to 0 0 0 again
-        poseStack.translate(0.5f, 0.0001f, 0.5f);
+        //poseStack.push(); //writes current "pos etc" and after following line if you add another layer everithing will be set to 0 0 0 again
+        //poseStack.translate(0.5f, 0.0001f, 0.5f); <- in exported version works normally, no need for this
         getRenderer().reRender(
                 getDefaultBakedModel(animatable),
                 poseStack,
@@ -47,7 +46,7 @@ public class ClayNexusRenderLayer extends GeoRenderLayer<ClayNexusBlockEntity> {
                 rgb[2] / 255f,
                 1f
         );
-        poseStack.pop(); //sets poseStack to the saved thing (push())
+        //poseStack.pop(); //sets poseStack to the saved thing (push())
     }
 
     public int[] getTeamColor(ClayNexusBlockEntity animatable) {
