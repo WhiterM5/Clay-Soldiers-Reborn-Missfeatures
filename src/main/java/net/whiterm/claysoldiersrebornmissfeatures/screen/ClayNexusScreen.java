@@ -3,10 +3,13 @@ package net.whiterm.claysoldiersrebornmissfeatures.screen;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.network.PacketByteBuf;
@@ -20,7 +23,7 @@ import net.whiterm.claysoldiersrebornmissfeatures.network.ModPackets;
 public class ClayNexusScreen extends HandledScreen<ClayNexusScreenHandler> {
     private static final Identifier TEXTURE = new Identifier(ClaySoldiersRebornMissfeatures.MOD_ID, "textures/gui/clay_nexus_gui.png");
     private int withdrawButtonX = 148;
-    private int withdrawButtonY = 54;
+    private int withdrawButtonY = 45; //if it would be 54 -> ideal height to match the Inventory title
 
     public ClayNexusScreen(ClayNexusScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
@@ -58,9 +61,20 @@ public class ClayNexusScreen extends HandledScreen<ClayNexusScreenHandler> {
         context.drawTexture(TEXTURE, x, y, 0, 0, backgroundWidth, backgroundHeight);
     }
 
+    int i = 0;
+
     @Override
     protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
         super.drawForeground(context, mouseX, mouseY);
+        ClayNexusBlockEntity blockEntity = this.getScreenHandler().getBlockEntity();
+        context.drawText(
+                this.textRenderer,
+                blockEntity.withdrawSoldiersCount() + "/" + blockEntity.withdrawMaxCapacity,
+                withdrawButtonX - 11,
+                withdrawButtonY + 14 + 5,
+                0x404040,
+                false
+                );
         //--------Withdraw Button---------
         Identifier withdrawButtonImage = new Identifier(ClaySoldiersRebornMissfeatures.MOD_ID, "textures/gui/withdraw_button.png");
         context.drawTexture(withdrawButtonImage, withdrawButtonX + 2, withdrawButtonY + 2, 0, 0, 14, 14, 14, 14);

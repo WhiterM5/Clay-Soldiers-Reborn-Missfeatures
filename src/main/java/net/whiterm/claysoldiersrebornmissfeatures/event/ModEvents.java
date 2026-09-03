@@ -1,11 +1,16 @@
 package net.whiterm.claysoldiersrebornmissfeatures.event;
 
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypeFilter;
@@ -13,6 +18,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3i;
 import net.whiterm.claysoldiersrebornmissfeatures.block.entity.ClayNexusBlockEntity;
+import net.whiterm.claysoldiersrebornmissfeatures.network.ModPackets;
 
 import java.util.*;
 
@@ -63,9 +69,12 @@ public class ModEvents {
                 }
                 List<ItemEntity> droppedSoldiers = world.getEntitiesByType(TypeFilter.instanceOf(ItemEntity.class),
                         new Box(pos.subtract(posDiffVec3i), pos.add(posDiffVec3i)),
-                        itemEntity -> itemEntity.getStack().getItem() == color); //pokud něco nefachčí kukni sem
+                        itemEntity -> itemEntity.getStack().getItem() == color);
                 if (!droppedSoldiers.isEmpty()) {
                     for (var item : droppedSoldiers) {
+                        //Maximum capacity cannot be exceeded (filters all itemStacks which's count would exceed the capacity)
+                        if (nexus.withdrawSoldiersCount() > nexus.withdrawMaxCapacity - item.getStack().getCount()) continue;
+                        //Write distances between items and nexus's
                         double distance = pos.getSquaredDistance(item.getPos());
                         Map<ClayNexusBlockEntity, ItemEntity> nexusItem = new HashMap<>();
                             nexusItem.put(nexus, item);
@@ -79,16 +88,25 @@ public class ModEvents {
                 for (int i = 0; i < colors.toArray().length; i++) {
                     //Get min distance and get the corresponding pair in the Map
                     double minDistance = getMinDistance(colors, i, distanceNexusItem);
-                    if (minDistance == Double.MAX_VALUE) {
-                        continue;
-                    }
+                    if (minDistance == Double.MAX_VALUE) continue;
                     Map<ClayNexusBlockEntity, ItemEntity> pair = distanceNexusItem.get(minDistance);
                     //Add item to the closest nexus
                     for (var entry : pair.entrySet()) {
                         ItemEntity itemEntity = entry.getValue();
                         ItemStack itemStack = itemEntity.getStack();
                         int itemCount = itemStack.getCount();
-                        entry.getKey().addItemToWithdrawButton(itemStack.getItem(), itemCount);
+                        ClayNexusBlockEntity blockEntity = entry.getKey();
+
+                        blockEntity.addItemToWithdrawButton(itemStack.getItem(), itemCount);
+                        PacketByteBuf buffer = PacketByteBufs.create();
+                        Map<ItemStack, Integer> forPlayerItemSoldiers1 = new HashMap<>();
+                        for (var entry1 : blockEntity.forPlayerItemSoldiers.entrySet()) {
+                            forPlayerItemSoldiers1.put(entry1.getKey().getDefaultStack(), entry1.getValue());
+                        }
+                        buffer.writeMap(forPlayerItemSoldiers1, PacketByteBuf::writeItemStack, PacketByteBuf::writeInt);
+                        for (var player : world.getPlayers()) { //TEST THIS ON SERVER!
+                            ServerPlayNetworking.send(player, ModPackets.NEXUS_WITHDRAW_SOLDIERS_COUNT_ID, buffer);
+                        }
                         itemEntity.setDespawnImmediately();
                     }
                 }

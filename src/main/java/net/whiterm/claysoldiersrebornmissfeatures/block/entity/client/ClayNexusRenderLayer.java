@@ -53,7 +53,7 @@ public class ClayNexusRenderLayer extends GeoRenderLayer<ClayNexusBlockEntity> {
         Item soldierItem = animatable.getSoldierItem();
         if (soldierItem == Items.AIR || soldierItem == null) return new int[] {255, 255, 255};
         int[] rgb = new int[3];
-        int color = 00000000;
+        int color = 0;
 
         Text soldierItemName = soldierItem.getName();
         for (ClientInfoStorage.ColoredItemDataBundle coloredItemBundle : ClientInfoStorage.coloredItemDataBundleList) {

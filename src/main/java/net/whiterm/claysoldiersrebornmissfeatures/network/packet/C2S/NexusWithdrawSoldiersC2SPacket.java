@@ -1,4 +1,4 @@
-package net.whiterm.claysoldiersrebornmissfeatures.network.packet;
+package net.whiterm.claysoldiersrebornmissfeatures.network.packet.C2S;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;

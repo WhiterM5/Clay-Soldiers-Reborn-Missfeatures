@@ -6,3 +6,13 @@ For now adds only the Clay Nexus with some additional and missing features :D
 
 
 For more info see the project page: https://www.curseforge.com/minecraft/mc-mods/clay-soldiers-reborn-missfeatures
+
+Changelog:
+-
+1.0.2 (WIP)
+- Added collection system max capacity
+- Added collection system count indicator to Nexus's GUI
+
+1.0.1
+- Fixed the team color layer offset
+

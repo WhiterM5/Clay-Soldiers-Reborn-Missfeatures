@@ -73,6 +73,7 @@ public class ClayNexusBlockEntity extends BlockEntity implements ExtendedScreenH
     //private Map<Item, Integer> droppedSoldiersMap = new HashMap<>();
     //private Map<Item, Integer> nexusSoldiers = new HashMap<>();
     public Map<Item, Integer> forPlayerItemSoldiers = new HashMap<>();
+    public int withdrawMaxCapacity = 864; //(1x double chest full of Soldiers - 16 * 27 * 2)
     private final int MAX_HEALTH = ModConfig.NEXUS_HEALTH;
     private int health = MAX_HEALTH;
     public int backgroundColorText = 16711680;
@@ -97,6 +98,7 @@ public class ClayNexusBlockEntity extends BlockEntity implements ExtendedScreenH
     @Override
     public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf) {
         buf.writeBlockPos(this.pos);
+
     }
 
     @Override
@@ -301,7 +303,7 @@ public class ClayNexusBlockEntity extends BlockEntity implements ExtendedScreenH
         markDirty();
     }
 
-    public ArrayList<ItemStack> beautifulStacks(){
+    public ArrayList<ItemStack> beautifulStacks(boolean clearForPlayerItemSoldiers){
         ArrayList<ItemStack> list = new ArrayList<>(List.of());
         for (var entry : forPlayerItemSoldiers.entrySet()){
             Item entryKey = entry.getKey();
@@ -327,10 +329,20 @@ public class ClayNexusBlockEntity extends BlockEntity implements ExtendedScreenH
 
             //reset
             //droppedSoldiersMap.replace(entryKey, droppedSoldiersMap.get(entryKey) - forPlayerItemSoldiers.get(entryKey));
-            forPlayerItemSoldiers.replace(entryKey, 0);
+            if (clearForPlayerItemSoldiers) {
+                forPlayerItemSoldiers.replace(entryKey, 0);
+            }
             markDirty();
         }
         return list;
+    }
+
+    public int withdrawSoldiersCount() {
+        int count = 0;
+        for (var itemStack : beautifulStacks(false)) {
+            count += itemStack.getCount();
+        }
+        return count;
     }
 
     /*------------------------------CREDITS--------------------------------
@@ -386,7 +398,7 @@ public class ClayNexusBlockEntity extends BlockEntity implements ExtendedScreenH
         List<ServerPlayerEntity> playerList = new ArrayList<>(List.of());
         playerList.add(player);
         int i = 0;
-        for (var stack : beautifulStacks()) {
+        for (var stack : beautifulStacks(true)) {
             i++;
             if (i == 1) {
                 if (playerInv.getEmptySlot() == -1) {
@@ -398,7 +410,7 @@ public class ClayNexusBlockEntity extends BlockEntity implements ExtendedScreenH
     }
 
     public void dropDroppedSoldiers(World world, BlockPos pos) {
-        for (var stack : beautifulStacks()) {
+        for (var stack : beautifulStacks(true)) {
             ItemEntity itemEntity = new ItemEntity(world, pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, stack);
             world.spawnEntity(itemEntity);
         }
@@ -576,7 +588,7 @@ public class ClayNexusBlockEntity extends BlockEntity implements ExtendedScreenH
         }
     }
 
-    private void updateDataAndClients() {
+    public void updateDataAndClients() {
         markDirty();
         if (world != null && !world.isClient) {
             world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_ALL);
