@@ -3,13 +3,10 @@ package net.whiterm.claysoldiersrebornmissfeatures.screen;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.network.PacketByteBuf;
@@ -34,6 +31,10 @@ public class ClayNexusScreen extends HandledScreen<ClayNexusScreenHandler> {
         super.init();
         ClayNexusBlockEntity blockEntity = handler.getBlockEntity();
         BlockPos pos = blockEntity.getPos();
+        //Update soldiers count display
+        PacketByteBuf buf = PacketByteBufs.create();
+        buf.writeBlockPos(pos);
+        ClientPlayNetworking.send(ModPackets.NEXUS_SEND_WITHDRAW_SOLDIERS_COUNT_ID, buf);
         titleX = (this.backgroundWidth - this.textRenderer.getWidth(this.title)) / 2;
         titleY = 5;
         //--------Withdraw Button---------
@@ -41,10 +42,14 @@ public class ClayNexusScreen extends HandledScreen<ClayNexusScreenHandler> {
         int withdrawButtonSize = 18;
         this.addDrawableChild(
                 ButtonWidget.builder(Text.of(""), button -> {
-                    //Send packet with pos
+                    //Withdraw soldiers
                     PacketByteBuf buffer = PacketByteBufs.create();
                     buffer.writeBlockPos(pos);
                     ClientPlayNetworking.send(ModPackets.NEXUS_WITHDRAW_SOLDIERS_ID, buffer);
+                    //Update soldiers count display
+                    PacketByteBuf buffer1 = PacketByteBufs.create();
+                    buffer1.writeBlockPos(pos);
+                    ClientPlayNetworking.send(ModPackets.NEXUS_SEND_WITHDRAW_SOLDIERS_COUNT_ID, buffer1);
                 }).dimensions(this.x + withdrawButtonX, this.y + withdrawButtonY, withdrawButtonSize, withdrawButtonSize).tooltip(Tooltip.of(buttonWithdrawText)).build()
         );
         //--------Withdraw Button---------
@@ -67,14 +72,18 @@ public class ClayNexusScreen extends HandledScreen<ClayNexusScreenHandler> {
     protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
         super.drawForeground(context, mouseX, mouseY);
         ClayNexusBlockEntity blockEntity = this.getScreenHandler().getBlockEntity();
+        //--------Withdraw Button Soldiers Count indicator---------
+        Text indicatorText = Text.of(blockEntity.withdrawSoldiersCount() + "/" + blockEntity.withdrawMaxCapacity);
+        int indicatorTextWidth = - indicatorText.getString().length() * 5 - indicatorText.getString().length();
         context.drawText(
                 this.textRenderer,
-                blockEntity.withdrawSoldiersCount() + "/" + blockEntity.withdrawMaxCapacity,
-                withdrawButtonX - 11,
+                indicatorText,
+                withdrawButtonX - 11 + indicatorTextWidth + 30,
                 withdrawButtonY + 14 + 5,
                 0x404040,
                 false
                 );
+        //--------Withdraw Button Soldiers Count indicator---------
         //--------Withdraw Button---------
         Identifier withdrawButtonImage = new Identifier(ClaySoldiersRebornMissfeatures.MOD_ID, "textures/gui/withdraw_button.png");
         context.drawTexture(withdrawButtonImage, withdrawButtonX + 2, withdrawButtonY + 2, 0, 0, 14, 14, 14, 14);

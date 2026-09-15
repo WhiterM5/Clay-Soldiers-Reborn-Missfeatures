@@ -161,7 +161,6 @@ public class ClayNexusBlockEntity extends BlockEntity implements ExtendedScreenH
         super.setWorld(world);
         if (world.isClient()) return;
         nexuses.add(this);
-        //System.out.println("add");
     }
 
     //Remove Nexus (setWorld is sometimes called when I don't want to it)
@@ -169,7 +168,6 @@ public class ClayNexusBlockEntity extends BlockEntity implements ExtendedScreenH
     public void markRemoved() {
         if (!world.isClient()) {
             nexuses.remove(this);
-            //System.out.println("rem");
         }
         super.markRemoved();
     }

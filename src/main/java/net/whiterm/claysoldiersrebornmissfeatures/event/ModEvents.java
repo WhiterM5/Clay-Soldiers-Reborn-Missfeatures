@@ -1,16 +1,11 @@
 package net.whiterm.claysoldiersrebornmissfeatures.event;
 
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypeFilter;
@@ -18,7 +13,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3i;
 import net.whiterm.claysoldiersrebornmissfeatures.block.entity.ClayNexusBlockEntity;
-import net.whiterm.claysoldiersrebornmissfeatures.network.ModPackets;
 
 import java.util.*;
 
@@ -96,17 +90,7 @@ public class ModEvents {
                         ItemStack itemStack = itemEntity.getStack();
                         int itemCount = itemStack.getCount();
                         ClayNexusBlockEntity blockEntity = entry.getKey();
-
                         blockEntity.addItemToWithdrawButton(itemStack.getItem(), itemCount);
-                        PacketByteBuf buffer = PacketByteBufs.create();
-                        Map<ItemStack, Integer> forPlayerItemSoldiers1 = new HashMap<>();
-                        for (var entry1 : blockEntity.forPlayerItemSoldiers.entrySet()) {
-                            forPlayerItemSoldiers1.put(entry1.getKey().getDefaultStack(), entry1.getValue());
-                        }
-                        buffer.writeMap(forPlayerItemSoldiers1, PacketByteBuf::writeItemStack, PacketByteBuf::writeInt);
-                        for (var player : world.getPlayers()) { //TEST THIS ON SERVER!
-                            ServerPlayNetworking.send(player, ModPackets.NEXUS_WITHDRAW_SOLDIERS_COUNT_ID, buffer);
-                        }
                         itemEntity.setDespawnImmediately();
                     }
                 }

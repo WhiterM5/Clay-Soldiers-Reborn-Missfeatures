@@ -29,5 +29,6 @@ public class ClaySoldiersRebornMissfeatures implements ModInitializer {
         GeckoLib.initialize();
 
         ModPackets.registerC2SPackets();
+        ModPackets.registerS2CPackets();
 	}
 }
