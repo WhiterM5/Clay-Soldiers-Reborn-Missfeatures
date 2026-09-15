@@ -1,0 +1,50 @@
+✓ -> U+2713
+PS: String worldy = world.isClient() ? "Client" : "Server";
+
+from Pikmin Master123
+    - in creative unnecessary to pick up soldiers (add button?)
+    - soldiers count indicator ✓
+
+save variables to NBT ✓
+make config (nexus health, amount of soldiers it spawns) ✓
+make the model ✓
+    texture ✓
+    + team color layer ✓
+
+
+nexus - instabreak, n̶e̶e̶d̶s̶ ̶p̶i̶c̶k̶a̶x̶e̶ ̶t̶o̶ ̶d̶r̶o̶p̶, stone sounds, destroy with tnt (+ drop) ✓
+soldiers attack only if nexus is active ✓
+delay 5 ticks ✓
+if shift rmb with CLAY -> repair (origo emtpy hand) ✓
+
+private float p_maxHealth = 20.0F; ✓
+    origo (mine now): ✓
+        if 1 soldier - 4 dmg
+        if more - 1 * dammiging soldiers
+    mine old:
+        deal dmg if 1 or more are in the block
+
+IMPORTANT: if no items in slot - CAN BE ACTIVE, ✓
+    in origo mod: soldiers attack it regardless it doesn't correspond to any team
+    me: do not attack until it corresponds to some team ✓
+
+-----------IMPORTANT--------------
+nexus can be activated by redstone signal ✓
+----------------------------------
+
+make soldiers drop nothing - /summon soldier ~ ~ ~ {DeathLootTable:"minecraft:empty"} ✓
+
+HEALTHBAR
+command output false when is spawned ✓
+
+█████
+▌
+//PS: to make it look like without spaces summon 2 displays
+PS: with 2 displays (1 health, 1 back)
+    translation of red one to 0.01
+
+BUGS
+
+When I change the soldier in the slot and I have spawned soldiers from nexus (other color than now), I can get em as item ✓
+Not really a bug - checking number of soldiers to spawn in 64x64x64 box is from the corner of the nexus (not from the center)
+Item dupe: 2 nexus with same color, throw 1 item -> both of them will have 1 item meaning you have 2 items now (if withdrawn) ✓
