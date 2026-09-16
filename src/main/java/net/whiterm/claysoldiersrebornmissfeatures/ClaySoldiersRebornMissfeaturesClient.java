@@ -8,6 +8,7 @@ import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
 import net.whiterm.claysoldiersrebornmissfeatures.block.ModBlocks;
 import net.whiterm.claysoldiersrebornmissfeatures.block.entity.ModBlockEntities;
 import net.whiterm.claysoldiersrebornmissfeatures.block.entity.client.ClayNexusRenderer;
+import net.whiterm.claysoldiersrebornmissfeatures.network.ModPackets;
 import net.whiterm.claysoldiersrebornmissfeatures.screen.ClayNexusScreen;
 import net.whiterm.claysoldiersrebornmissfeatures.screen.ModScreenHandlers;
 
@@ -19,5 +20,6 @@ public class ClaySoldiersRebornMissfeaturesClient implements ClientModInitialize
                 ClayNexusRenderer::new);
 
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.CLAY_NEXUS, RenderLayer.getCutoutMipped());
+        ModPackets.registerS2CPackets();
     }
 }
